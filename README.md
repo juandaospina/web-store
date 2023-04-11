@@ -1,4 +1,7 @@
-# Store
+# API Store
+
+URL: https://fakestoreapi.com/
+Endpoints: GET: all_products: https://fakestoreapi.com/products
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 15.2.4.
 

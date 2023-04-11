@@ -1,0 +1,23 @@
+<section class="card">
+  <div class="card-info">
+    <img
+      src="https://i.pinimg.com/280x280_RS/2e/45/66/2e4566fd829bcf9eb11ccdb5f252b02f.jpg"
+      alt="Angular post instagram"
+      width="30"
+      height="30"
+    />
+    <div>
+      <span [class.active]="state">jdospina_</span>
+      <p>Medellín - Colombia</p>
+    </div>
+  </div>
+  <div class="card-img">
+    <img
+      src="https://edteam-media.s3.amazonaws.com/blogs/original/152d4886-6290-4084-8de9-28a382fd40d1.png"
+      alt=""
+      width="100%"
+      height=""
+    />
+  </div>
+  <app-post-info [state]="state" (setState)="onState($event)"></app-post-info>
+</section>
