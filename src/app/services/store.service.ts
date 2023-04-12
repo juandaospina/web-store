@@ -35,12 +35,7 @@ export class StoreService {
   addProductToDetail(product: Product) {
     this._productDetail.next(product);
     this._hasProductDetail.next(true);
-    // console.log('[_productDetail]', this._productDetail);
   }
-
-  // onCloseProductDetail() {
-  //   this.hasProductDetail = !this.hasProductDetail;
-  // }
 
   getShoppingCartList() {
     return this._shoppingCartList;
