@@ -32,6 +32,7 @@ export class ProductComponent implements OnInit {
   }
 
   onShowDetail() {
+    console.log("[show_product_detail]")
     // this.showProduct.emit(this.product.id);
     this.storeService.addProductToDetail(this.product);
   }

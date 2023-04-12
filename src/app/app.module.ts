@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
 
-import { SwiperModule } from 'swiper/angular';
 // import SwiperModule from 'swiper';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -40,7 +39,6 @@ import { ProductDetailComponent } from './components/product-detail/product-deta
     AppRoutingModule,
     HttpClientModule,
     NgOptimizedImage,
-    SwiperModule
   ],
   providers: [],
   bootstrap: [AppComponent]
