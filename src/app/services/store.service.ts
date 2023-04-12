@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+// Patrón para permitir que otros componentes se puedan suscribir a una variable
 import { BehaviorSubject } from 'rxjs';
 
 import { Product } from '../models';
@@ -8,20 +9,39 @@ import { Product } from '../models';
 })
 export class StoreService {
   constructor() {}
-  // Lo recomendable es que los atributos internos sean privados para un único uso del servicio
-  // Si otro componente requiere acceder a un atributo la buena práctica es hacer un método que lo retorne
   private _shoppingCartList: Product[] = [];
+  private _hasProductDetail = new BehaviorSubject<boolean>(false);
   private _cart = new BehaviorSubject<Product[]>([]);
-
-  // $ observable
-  _cart$ = this._cart.asObservable();
+  private _productDetail = new BehaviorSubject<Product>({
+    id: 0,
+    title: '',
+    description: '',
+    images: [],
+    price: 0,
+    category: {
+      id: 0,
+      name: '',
+    },
+  });
+  public cart$ = this._cart.asObservable();
+  public productDetail$ = this._productDetail.asObservable();
+  public hasProductDetail$ = this._hasProductDetail.asObservable();
 
   addProduct(product: Product) {
     this._shoppingCartList.push(product);
     this._cart.next(this._shoppingCartList);
   }
 
-  // Returna un atributo para que este no pueda ser accedido directamente y corrompido
+  addProductToDetail(product: Product) {
+    this._productDetail.next(product);
+    this._hasProductDetail.next(true);
+    // console.log('[_productDetail]', this._productDetail);
+  }
+
+  // onCloseProductDetail() {
+  //   this.hasProductDetail = !this.hasProductDetail;
+  // }
+
   getShoppingCartList() {
     return this._shoppingCartList;
   }
@@ -30,4 +50,3 @@ export class StoreService {
     return this._shoppingCartList.reduce((sum, item) => sum + item.price, 0);
   }
 }
-

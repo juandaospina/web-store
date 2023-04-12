@@ -2,6 +2,7 @@
   [ngSrc]="img"
   width="200"
   height="300"
+  priority
   (load)="imgLoaded()"
   (error)="imgError()"
   *ngIf="img; else elseImg"

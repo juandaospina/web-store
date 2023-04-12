@@ -1,0 +1,47 @@
+@import url("swiper/scss");
+@import url("swiper/scss/navigation");
+// @import url('swiper/scss/pagination');
+
+.product-detail {
+  // width: 100vw;
+  position: fixed;
+  top: 0;
+  // left: 60%;
+  bottom: 0;
+  right: 0;
+  margin-top: 3.5rem;
+  background: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  transition: all ease-out 0.5s;
+  transform: translateX(100%);
+  &.active {
+    transform: translateX(0);
+  }
+}
+
+.detail-info {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-top: 30px;
+  padding: 0 10px;
+  h3 {
+    font-size: 20px;
+    font-weight: bold;
+  }
+  p,
+  span {
+    font-weight: 800;
+  }
+  span {
+    color: rgba(116, 118, 119, 0.644);
+  }
+}
+
+@media screen and (min-width: 640px) {
+  .product-detail {
+    left: 70%;
+  }
+}

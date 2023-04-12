@@ -1,6 +1,8 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
+
+import { SwiperModule } from 'swiper/angular';
 // import SwiperModule from 'swiper';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -16,6 +18,7 @@ import { ReversePipe } from './pipes/reverse.pipe';
 import { TimeAgoPipe } from './pipes/time-ago.pipe';
 import { HighlightDirective } from './directives/highlight.directive';
 import { NgOptimizedImage } from "@angular/common";
+import { ProductDetailComponent } from './components/product-detail/product-detail.component';
 
 @NgModule({
   declarations: [
@@ -29,13 +32,15 @@ import { NgOptimizedImage } from "@angular/common";
     NavigationComponent,
     ReversePipe,
     TimeAgoPipe,
-    HighlightDirective
+    HighlightDirective,
+    ProductDetailComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
     NgOptimizedImage,
+    SwiperModule
   ],
   providers: [],
   bootstrap: [AppComponent]
