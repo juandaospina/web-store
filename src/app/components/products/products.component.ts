@@ -1,32 +1,93 @@
 import { Component, inject } from '@angular/core';
 
-import { Product } from 'src/app/models';
+import Swal from 'sweetalert2';
+
 import { ProductsService } from 'src/app/services/products.service';
 import { StoreService } from 'src/app/services/store.service';
+import { Product } from 'src/app/models';
 
 @Component({
   selector: 'app-products',
   templateUrl: './products.component.html',
-  styleUrls: ['./products.component.scss']
+  styleUrls: ['./products.component.scss'],
 })
 export class ProductsComponent {
-  public shoppingCartList: Product[] = [];
-  public storeService = inject(StoreService)
+  // Dependencies
+  public storeService = inject(StoreService);
   public productsService = inject(ProductsService);
+  // Properties
+  public statusResponse: 'loading' | 'success' | 'error' | 'init' = 'init';
+  public shoppingCartList: Product[] = [];
   public total: number = 0;
-  public products: Product[] = []
-  public today: Date = new Date();
-  public date: Date = new Date(2023, 3, 29)
+  public products: Product[] = [];
+  public limit: number = 10;
+  public offset: number = 0;
 
   ngOnInit() {
+    this.statusResponse = 'loading';
     this.shoppingCartList = this.storeService.getShoppingCartList();
-    this.productsService.getAllProducts().subscribe((data) => {
-      this.products = data;
-    })
+
+    this.productsService.getAllProducts(this.limit, this.offset).subscribe(
+      (data) => {
+        this.products = data;
+        this.offset = this.limit;
+        this.statusResponse = 'success';
+      },
+      (error) => {
+        this.statusResponse = 'error';
+        Swal.fire({
+          title: "Ups.. Algo malo ocurrió",
+          text: error,
+          icon: "error"
+        })
+        console.log('[products_error]', error);
+      }
+    );
+
+    this.productsService.updatedProduct$.subscribe((product) => {
+      const productIndex = this.products.findIndex(
+        (item) => item.id === product.id
+      );
+      this.products[productIndex] = product;
+      // or
+      // this.products = this.products.map((item) =>
+      //   item.id === product.id ? { ...product } : { ...item }
+      // );
+    });
+    this.productsService.deletedProduct$.subscribe((product) => {
+      console.log('[deleted-product_observable]', product);
+      const productIndex = this.products.findIndex(
+        (item) => item.id === product.id
+      );
+      this.products.splice(productIndex, 1);
+    });
   }
 
   onAddToShoppingCart(product: Product) {
     this.storeService.addProduct(product);
     this.total = this.storeService.getTotal();
+  }
+
+  onCreateProduct() {
+    const newProduct = {
+      title: 'Vans Clasic',
+      price: 213000,
+      description: 'Shoes Vans Clasic new generation',
+      categoryId: 1,
+      images: ['https://placeimg.com/640/480/animals?r=0.9730893452398492'],
+    };
+    this.productsService.create(newProduct).subscribe((data) => {
+      console.log('[created_product]', data);
+      this.products.unshift(data);
+    });
+  }
+
+  onProductMoreLoad() {
+    this.productsService
+      .getAllProducts(this.limit, this.offset)
+      .subscribe((data) => {
+        this.products = [...this.products, ...data];
+        this.offset += this.limit;
+      });
   }
 }

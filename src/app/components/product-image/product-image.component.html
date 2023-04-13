@@ -3,10 +3,9 @@
   width="200"
   height="300"
   priority
-  (load)="imgLoaded()"
   (error)="imgError()"
-  *ngIf="img; else elseImg"
+  *ngIf="img.includes('https'); else elseImg"
 />
 <ng-template #elseImg>
-  <img [ngSrc]="imageDefault" alt="image default" />
+  <img [ngSrc]="imageDefault" width="200" height="300" alt="image default" />
 </ng-template>

@@ -1,3 +1,6 @@
+<button type="button" (click)="onCreateProduct()" style="margin-top: 10rem">
+  Create producto
+</button>
 <div class="products-grid">
   <app-product
     (addedProduct)="onAddToShoppingCart($event)"
@@ -5,4 +8,5 @@
     *ngFor="let product of products"
   ></app-product>
 </div>
+<button (click)="onProductMoreLoad()">Cargar más...</button>
 <app-product-detail></app-product-detail>

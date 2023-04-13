@@ -1,22 +1,112 @@
-import { Injectable, inject } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import {
+  HttpClient,
+  HttpErrorResponse,
+  HttpParams,
+  HttpStatusCode,
+} from '@angular/common/http';
+import { Injectable, inject, OnInit } from '@angular/core';
+import { BehaviorSubject, throwError } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 
-import { Product } from '../models';
-import { env } from '../enviroments';
+import { CreateProductDTO, Product, UpdateProductDTO } from '../models';
+import { environment } from '../../environments/environment';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
-export class ProductsService {
+export class ProductsService implements OnInit {
+  // Dependencies
   constructor() {}
   private _http = inject(HttpClient);
-  // private apiUrl = '/';
+  // Behavior Subject
+  private _updatedProduct = new BehaviorSubject<Product>({
+    id: 0,
+    title: '',
+    description: '',
+    images: [],
+    price: 0,
+    category: {
+      id: 0,
+      name: '',
+    },
+  });
+  private _deletedProduct = new BehaviorSubject<Product>({
+    id: 0,
+    title: '',
+    description: '',
+    images: [],
+    price: 0,
+    category: {
+      id: 0,
+      name: '',
+    },
+  });
+  // Observables
+  public updatedProduct$ = this._updatedProduct.asObservable();
+  public deletedProduct$ = this._deletedProduct.asObservable();
+  ngOnInit(): void {}
 
-  getAllProducts() {
-    return this._http.get<Product[]>(`${env.baseUrl}/products`);
+  // ↓ Util methods 
+  private handleErrors(error: HttpErrorResponse): Observable<never> {
+    if (error.status == HttpStatusCode.Forbidden)
+      return throwError(() => 'No tiene permisos para realizar la solicitud.');
+    if (error.status == HttpStatusCode.NotFound)
+      return throwError(() => 'El producto no existe.');
+    if (error.status == HttpStatusCode.InternalServerError)
+      return throwError(() => 'Error en el servidor.');
+    return throwError(() => 'Un error inesperado ha ocurrido.');
+  }
+
+  /* 
+    ↓ Handler methods: These methods allow to handle
+    the state of the observers
+  */
+  onUpdatedProduct(product: Product) {
+    this._updatedProduct.next(product);
+  }
+
+  onDeletedProduct(product: Product) {
+    this._deletedProduct.next(product);
+  }
+
+  /*
+    ↓ These methods allow access to server resources such as 
+    products (GET, POST, PUT, DELETE)
+  */ 
+  getAllProducts(limit?: number, offset?: number): Observable<Product[]> {
+    let params = new HttpParams();
+    if (limit != undefined && offset != undefined) {
+      // Se debe llamar params = params, set devuelve el body,
+      // si solo se hace params.set se esta creando una nueva instancia de HttpParams
+      params = params.set('offset', offset);
+      params = params.set('limit', limit);
+    }
+    return this._http
+      .get<Product[]>(`${environment.baseUrl}/products`, { params })
+      .pipe(
+        catchError((err: HttpErrorResponse) => {
+          return this.handleErrors(err);
+        })
+      );
   }
 
   getProduct(id: number) {
-    return this._http.get<Product>(`${env.baseUrl}/${id}`);
+    return this._http.get<Product>(`${environment.baseUrl}/${id}`);
+  }
+
+  create(data: CreateProductDTO) {
+    return this._http.post<Product>(`${environment.baseUrl}/products`, data);
+  }
+
+  update(id: number, data: UpdateProductDTO) {
+    return this._http.put<Product>(
+      `${environment.baseUrl}/products/${id}`,
+      data
+    );
+  }
+
+  delete(id: number) {
+    return this._http.delete<boolean>(`${environment.baseUrl}/products/${id}`);
   }
 }

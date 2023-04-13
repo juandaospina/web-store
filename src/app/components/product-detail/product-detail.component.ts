@@ -1,6 +1,6 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { Product } from 'src/app/models';
-import { StoreService } from 'src/app/services/store.service';
+import { StoreService, ProductsService } from 'src/app/services';
 
 @Component({
   selector: 'app-product-detail',
@@ -10,6 +10,7 @@ import { StoreService } from 'src/app/services/store.service';
 export class ProductDetailComponent implements OnInit {
   public showProductDetail: boolean = false;
   public storeService = inject(StoreService);
+  public productService = inject(ProductsService);
   public product: Product = {
     id: 0,
     title: '',
@@ -24,18 +25,35 @@ export class ProductDetailComponent implements OnInit {
 
   ngOnInit(): void {
     this.storeService.productDetail$.subscribe((product) => {
-      console.log('[detail_suscribe]', product);
       this.product = product;
     });
-    this.storeService.hasProductDetail$.subscribe(hasProduct => {
-      console.log("[has_product]", hasProduct)
+    this.storeService.hasProductDetail$.subscribe((hasProduct) => {
       this.showProductDetail = hasProduct;
-    })
+    });
   }
 
   toggleProductDetail() {
-    console.log("[toggleProductDetail]", this.showProductDetail)
     // this.storeService.onCloseProductDetail();
     this.showProductDetail = !this.showProductDetail;
+  }
+
+  onUpdateProduct() {
+    const data = {
+      title: 'Nike Jordan',
+      price: 456000,
+    };
+    this.productService.update(this.product.id, data).subscribe((data) => {
+      this.product = data;
+      this.productService.onUpdatedProduct(data);
+    });
+  }
+
+  onDeleteProduct() {
+    this.productService.delete(this.product.id).subscribe((res) => {
+      if (res) {
+        this.showProductDetail = false;
+        this.productService.onDeletedProduct(this.product);
+      }
+    });
   }
 }
