@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 // Patrón para permitir que otros componentes se puedan suscribir a una variable
 import { BehaviorSubject } from 'rxjs';
 
-import { Product } from '../models';
+import { Product } from '../types/product';
 
 @Injectable({
   providedIn: 'root',

@@ -5,7 +5,7 @@ import Swal from 'sweetalert2';
 
 import { ProductsService } from 'src/app/services/products.service';
 import { StoreService } from 'src/app/services/store.service';
-import { Product } from 'src/app/models';
+import { Product } from 'src/app/types/product';
 
 @Component({
   selector: 'app-products',

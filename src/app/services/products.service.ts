@@ -8,7 +8,7 @@ import { Injectable, inject, OnInit } from '@angular/core';
 import { BehaviorSubject, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 
-import { CreateProductDTO, Product, UpdateProductDTO } from '../models';
+import { CreateProductDTO, Product, UpdateProductDTO } from '../types/product';
 import { environment } from '../../environments/environment';
 import { Observable } from 'rxjs';
 

@@ -1,7 +1,7 @@
 import { Component, Input, Output, EventEmitter, inject } from '@angular/core';
 
 import { StoreService } from 'src/app/services';
-import { Product } from 'src/app/models';
+import { Product } from 'src/app/types/product';
 
 @Component({
   selector: 'app-product',
