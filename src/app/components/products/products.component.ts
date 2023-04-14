@@ -1,6 +1,7 @@
 import { Component, inject } from '@angular/core';
 
 import Swal from 'sweetalert2';
+// import 'sweetalert2/src/sweetalert2.scss';
 
 import { ProductsService } from 'src/app/services/products.service';
 import { StoreService } from 'src/app/services/store.service';
@@ -27,22 +28,23 @@ export class ProductsComponent {
     this.statusResponse = 'loading';
     this.shoppingCartList = this.storeService.getShoppingCartList();
 
-    this.productsService.getAllProducts(this.limit, this.offset).subscribe(
-      (data) => {
-        this.products = data;
+    this.productsService.getAllProducts(this.limit, this.offset).subscribe({
+      next: (value) => {
+        this.products = value;
         this.offset = this.limit;
         this.statusResponse = 'success';
+        console.log('[suscribe_next]', value);
       },
-      (error) => {
+      error: (err) => {
+        console.log('[suscribe_error]', err);
         this.statusResponse = 'error';
         Swal.fire({
-          title: "Ups.. Algo malo ocurrió",
-          text: error,
-          icon: "error"
-        })
-        console.log('[products_error]', error);
-      }
-    );
+          title: 'Ups.. Algo malo ocurrió',
+          text: err,
+          icon: 'error',
+        });
+      },
+    });
 
     this.productsService.updatedProduct$.subscribe((product) => {
       const productIndex = this.products.findIndex(

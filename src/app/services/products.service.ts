@@ -6,7 +6,7 @@ import {
 } from '@angular/common/http';
 import { Injectable, inject, OnInit } from '@angular/core';
 import { BehaviorSubject, throwError } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { catchError, map } from 'rxjs/operators';
 
 import { CreateProductDTO, Product, UpdateProductDTO } from '../models';
 import { environment } from '../../environments/environment';
@@ -85,6 +85,12 @@ export class ProductsService implements OnInit {
     return this._http
       .get<Product[]>(`${environment.baseUrl}/products`, { params })
       .pipe(
+        map(products => products.map((product) => {
+          return {
+            ...product,
+            taxe: product.price * 0.19
+          }
+        })),
         catchError((err: HttpErrorResponse) => {
           return this.handleErrors(err);
         })

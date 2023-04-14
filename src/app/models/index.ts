@@ -10,6 +10,7 @@ export interface Product {
   images: string[];
   price: number;
   category: Category;
+  taxe?: number
 }
 
 export interface CreateProductDTO extends Omit<Product, 'id' | 'category'> {
