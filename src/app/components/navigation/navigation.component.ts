@@ -23,6 +23,5 @@ export class NavigationComponent {
 
   toggleMenu() {
     this.activeMenu = !this.activeMenu;
-    console.log('[toggle_menu]', this.activeMenu);
   }
 }

@@ -33,10 +33,8 @@ export class ProductsComponent {
         this.products = value;
         this.offset = this.limit;
         this.statusResponse = 'success';
-        console.log('[suscribe_next]', value);
       },
       error: (err) => {
-        console.log('[suscribe_error]', err);
         this.statusResponse = 'error';
         Swal.fire({
           title: 'Ups.. Algo malo ocurrió',
@@ -57,7 +55,6 @@ export class ProductsComponent {
       // );
     });
     this.productsService.deletedProduct$.subscribe((product) => {
-      console.log('[deleted-product_observable]', product);
       const productIndex = this.products.findIndex(
         (item) => item.id === product.id
       );
@@ -79,7 +76,6 @@ export class ProductsComponent {
       images: ['https://placeimg.com/640/480/animals?r=0.9730893452398492'],
     };
     this.productsService.create(newProduct).subscribe((data) => {
-      console.log('[created_product]', data);
       this.products.unshift(data);
     });
   }

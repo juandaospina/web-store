@@ -9,7 +9,6 @@ export class PostCardComponent {
   public state: boolean = false;
 
   onState(state: boolean) {
-    console.log("[state in parent]", state);
     this.state = state;
   }
 }
