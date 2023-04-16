@@ -1,6 +1,6 @@
 import { Component, inject, OnInit } from '@angular/core';
 
-import { UsersService, AuthService } from './services';
+import { UsersService, AuthService, TokenService } from './services';
 
 @Component({
   selector: 'app-root',
@@ -11,12 +11,12 @@ export class AppComponent implements OnInit {
   // Dependencies
   private userService = inject(UsersService);
   private authService = inject(AuthService);
-  private _token$ = '';
+  private tokenService = inject(TokenService);
 
   ngOnInit(): void {
-    this.authService.token$.subscribe(value => {
-      this._token$ = value;
-    });
+    // this.authService.token$.subscribe(value => {
+    //   this._token$ = value;
+    // });
   }
 
   // Methods
@@ -42,9 +42,10 @@ export class AppComponent implements OnInit {
       password: 'ojaisa',
     };
     this.authService.login(signal.email, signal.password).subscribe({
-      next: (response) => {;
-        window.localStorage.setItem("token", response.access_token)
-        this.authService.token$.emit(response.access_token);
+      next: (response) => {
+        this.tokenService.saveToken(response.access_token);
+        // window.localStorage.setItem("token", response.access_token)
+        // this.authService.token$.emit(response.access_token);
       },
       error: (error) => {
         console.log('[error_signIn]', error);

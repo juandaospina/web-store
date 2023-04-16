@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
+import { HttpClientModule } from '@angular/common/http';
 
 import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
 
@@ -20,6 +20,7 @@ import { NgOptimizedImage } from '@angular/common';
 import { ProductDetailComponent } from './components/product-detail/product-detail.component';
 import { TimeInterceptorConfig } from './interceptors/time.interceptor';
 import { AuthInterceptorConfig } from './interceptors/auth.interceptor';
+import { TokenInterceptorConfig } from './interceptors/token.interceptor';
 
 @NgModule({
   declarations: [
@@ -43,7 +44,11 @@ import { AuthInterceptorConfig } from './interceptors/auth.interceptor';
     NgOptimizedImage,
     SweetAlert2Module.forRoot(),
   ],
-  providers: [TimeInterceptorConfig, AuthInterceptorConfig],
+  providers: [
+    TimeInterceptorConfig,
+    AuthInterceptorConfig,
+    TokenInterceptorConfig,
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
