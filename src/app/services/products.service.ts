@@ -1,19 +1,22 @@
 import {
   HttpClient,
   HttpErrorResponse,
+  HttpInterceptor,
   HttpParams,
   HttpStatusCode,
 } from '@angular/common/http';
-import { Injectable, inject, OnInit } from '@angular/core';
+import { Injectable, inject, OnInit, InjectionToken } from '@angular/core';
 import { BehaviorSubject, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
+import { Observable } from 'rxjs';
 
 import { CreateProductDTO, Product, UpdateProductDTO } from '../types/product';
+import { TimeInterceptor } from '../interceptors/time.interceptor';
 import { environment } from '../../environments/environment';
-import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
+  deps: [new InjectionToken<HttpInterceptor[]>('HTTP_INTERCEPTORS')]
 })
 export class ProductsService implements OnInit {
   // Dependencies
@@ -49,10 +52,11 @@ export class ProductsService implements OnInit {
 
   // ↓ Util methods 
   private handleErrors(error: HttpErrorResponse): Observable<never> {
+    console.log("[error_handle]", error)
     if (error.status == HttpStatusCode.Forbidden)
       return throwError(() => 'No tiene permisos para realizar la solicitud.');
     if (error.status == HttpStatusCode.NotFound)
-      return throwError(() => 'El producto no existe.');
+      return throwError(() => 'No existen productos en el servicio.');
     if (error.status == HttpStatusCode.InternalServerError)
       return throwError(() => 'Error en el servidor.');
     return throwError(() => 'Un error inesperado ha ocurrido.');
@@ -91,7 +95,7 @@ export class ProductsService implements OnInit {
             taxe: product.price * 0.19
           }
         })),
-        catchError((err: HttpErrorResponse) => {
+        catchError((err: HttpErrorResponse): Observable<never> => {
           return this.handleErrors(err);
         })
       );

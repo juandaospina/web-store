@@ -18,12 +18,18 @@ export class UsersService {
     These methods allow access a server resources of users
   */
   create(data: CreateUser): Observable<User> {
-    return this._http.post<User>(`\${environment.baseUrl}/user`, data).pipe(
-      catchError((error: HttpErrorResponse, caught: Observable<User>) => {
+    return this._http.post<User>(`${environment.baseUrl}/users`, data).pipe(
+      catchError((error: HttpErrorResponse): Observable<never> => {
+        console.log('[error_create_user]', error.error.message);
+        if (error.status === 400) {
+          return throwError(() => 'Verifique la información ingresada')
+        }
         if (error.status === 401) {
           return throwError(() => 'Algo malo ocurrió');
         }
-        return caught;
+        return throwError(
+          () => 'Algo malo paso, intente de nuevo en un momento'
+        );
       })
     );
   }
