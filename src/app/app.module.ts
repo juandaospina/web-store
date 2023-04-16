@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 
 import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
 
@@ -16,8 +16,10 @@ import { NavigationComponent } from './components/navigation/navigation.componen
 import { ReversePipe } from './pipes/reverse.pipe';
 import { TimeAgoPipe } from './pipes/time-ago.pipe';
 import { HighlightDirective } from './directives/highlight.directive';
-import { NgOptimizedImage } from "@angular/common";
+import { NgOptimizedImage } from '@angular/common';
 import { ProductDetailComponent } from './components/product-detail/product-detail.component';
+import { TimeInterceptorConfig } from './interceptors/time.interceptor';
+import { AuthInterceptorConfig } from './interceptors/auth.interceptor';
 
 @NgModule({
   declarations: [
@@ -32,7 +34,7 @@ import { ProductDetailComponent } from './components/product-detail/product-deta
     ReversePipe,
     TimeAgoPipe,
     HighlightDirective,
-    ProductDetailComponent
+    ProductDetailComponent,
   ],
   imports: [
     BrowserModule,
@@ -41,10 +43,10 @@ import { ProductDetailComponent } from './components/product-detail/product-deta
     NgOptimizedImage,
     SweetAlert2Module.forRoot(),
   ],
-  providers: [],
-  bootstrap: [AppComponent]
+  providers: [TimeInterceptorConfig, AuthInterceptorConfig],
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}
 
 /*
   npm install -g @ionic/cli native-run cordova-res
