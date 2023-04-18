@@ -8,6 +8,11 @@
     <button (click)="onUserSigninHandler()">Ingresar</button>
   </ng-template>
 </div>
+
+<span>
+  <button (click)="onDowloadPDF()">Descargar PDF</button>
+</span>
+
 <!-- <app-post-card></app-post-card> -->
 <span *ngIf="user.email">{{ user.email }}</span>
 <app-products></app-products>

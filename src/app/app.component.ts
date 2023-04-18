@@ -1,7 +1,12 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core'
 
-import { UsersService, AuthService, TokenService } from './services';
-import { User } from './types/user';
+import {
+  UsersService,
+  AuthService,
+  TokenService,
+  FilesService,
+} from './services'
+import { User } from './types/user'
 
 @Component({
   selector: 'app-root',
@@ -9,12 +14,12 @@ import { User } from './types/user';
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent implements OnInit {
-  constructor(
-  ) {}
+  constructor() {}
   // Dependencies
   private userService = inject(UsersService);
   private authService = inject(AuthService);
   private tokenService = inject(TokenService);
+  private fileService = inject(FilesService);
   // Properties
   public hasUser: boolean = false;
   public user: User = { id: 0, name: '', email: '', password: '' };
@@ -29,7 +34,7 @@ export class AppComponent implements OnInit {
   }
 
   // Methods
-  onUserCreateHandler() {
+  public onUserCreateHandler() {
     const user = {
       name: 'Samuel Ospina',
       email: 'sospina_test@email.es',
@@ -46,7 +51,7 @@ export class AppComponent implements OnInit {
     });
   }
 
-  onUserSigninHandler() {
+  public onUserSigninHandler() {
     const signal = {
       email: 'sospina_test@email.es',
       password: 'ojaisa',
@@ -65,7 +70,7 @@ export class AppComponent implements OnInit {
     });
   }
 
-  onUserProfileHandler() {
+  public onUserProfileHandler() {
     this.authService.getProfile().subscribe({
       next: (response) => {
         this.authService.userProfile$.emit(response);
@@ -74,5 +79,14 @@ export class AppComponent implements OnInit {
         console.log('[error_get_profile]', err);
       },
     });
+  }
+
+  public onDowloadPDF() {
+    console.log("[download_file]");
+    return this.fileService.getFile(
+      'test.pdf',
+      'https://young-sands-07814.herokuapp.com/api/files/dummy.pdf',
+      'application/pdf'
+    ).subscribe();
   }
 }
