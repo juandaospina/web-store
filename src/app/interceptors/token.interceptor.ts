@@ -5,30 +5,33 @@ import {
   HttpEvent,
   HttpInterceptor,
   HTTP_INTERCEPTORS,
-  HttpHeaders
+  HttpHeaders,
+  HttpContextToken,
+  HttpContext,
 } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { TokenService } from '../services';
+
+const ACCESS_TOKEN_HANDLE = new HttpContextToken(() => false);
+
+export function applyToken() {
+  return new HttpContext().set(ACCESS_TOKEN_HANDLE, true)
+}
 
 @Injectable()
 export class TokenInterceptor implements HttpInterceptor {
+  constructor() {}
 
-  constructor(
-    private tokenService: TokenService
-  ) {}
-
-  intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
-    console.log("[token_service]")
-    // const token: string = window.localStorage.getItem("token") ?? '';
-    const token = this.tokenService.getToken();
-    let headers;
-    if (token) {
-      console.log("[hasToken]", token);
-      headers = new HttpHeaders().set(
-        "Authorization", `Bearer ${token}`
-      );
+  intercept(
+    request: HttpRequest<unknown>,
+    next: HttpHandler
+  ): Observable<HttpEvent<unknown>> {
+    if (request.context.get(ACCESS_TOKEN_HANDLE)) {
+      console.log('[auth_interceptor]');
+      const token: string = window.localStorage.getItem('token') ?? '';
+      const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+      request = request.clone({ headers });
+      return next.handle(request);
     }
-    request = request.clone({ headers });
     return next.handle(request);
   }
 }
@@ -37,4 +40,4 @@ export const TokenInterceptorConfig = {
   provide: HTTP_INTERCEPTORS,
   useClass: TokenInterceptor,
   multi: true,
-}
+};

@@ -2,6 +2,7 @@ import { Injectable, inject, EventEmitter } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
 import { environment } from '../../environments/environment';
+import { applyToken } from '../interceptors/token.interceptor';
 import { AuthToken } from '../types/auth';
 import { User } from '../types/user';
 
@@ -20,14 +21,21 @@ export class AuthService {
     These methods allow to handle process of login, authentication, profile
   */
 
-  login(email: string, password: string) {
+  public login(email: string, password: string) {
     return this._http.post<AuthToken>(`${environment.baseUrl}/auth/login`, {
       email,
       password,
     });
   }
 
-  getProfile() {
-    return this._http.get<User>(`${environment.baseUrl}/auth/profile`);
+  public getProfile() {
+    return this._http.get<User>(`${environment.baseUrl}/auth/profile`, {
+      context: applyToken()
+    });
+  }
+
+  public hasUser() {
+    console.log("[user$]", this.userProfile$)
+    return this.userProfile$ ? true : false;
   }
 }

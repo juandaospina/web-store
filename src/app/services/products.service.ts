@@ -11,8 +11,8 @@ import { catchError, map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 
 import { CreateProductDTO, Product, UpdateProductDTO } from '../types/product';
-import { TimeInterceptor } from '../interceptors/time.interceptor';
 import { environment } from '../../environments/environment';
+import { checkTime } from '../interceptors/time.interceptor';
 
 @Injectable({
   providedIn: 'root',
@@ -87,7 +87,7 @@ export class ProductsService implements OnInit {
       params = params.set('limit', limit);
     }
     return this._http
-      .get<Product[]>(`${environment.baseUrl}/products`, { params })
+      .get<Product[]>(`${environment.baseUrl}/products`, { params, context: checkTime() })
       .pipe(
         map(products => products.map((product) => {
           return {

@@ -19,8 +19,8 @@ import { HighlightDirective } from './directives/highlight.directive';
 import { NgOptimizedImage } from '@angular/common';
 import { ProductDetailComponent } from './components/product-detail/product-detail.component';
 import { TimeInterceptorConfig } from './interceptors/time.interceptor';
-import { AuthInterceptorConfig } from './interceptors/auth.interceptor';
 import { TokenInterceptorConfig } from './interceptors/token.interceptor';
+import { AuthInterceptorConfig } from './interceptors/auth.interceptor';
 
 @NgModule({
   declarations: [
@@ -46,13 +46,10 @@ import { TokenInterceptorConfig } from './interceptors/token.interceptor';
   ],
   providers: [
     TimeInterceptorConfig,
-    AuthInterceptorConfig,
     TokenInterceptorConfig,
+    // AuthInterceptorConfig,
   ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
 
-/*
-  npm install -g @ionic/cli native-run cordova-res
-*/
