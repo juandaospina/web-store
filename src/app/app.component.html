@@ -13,6 +13,15 @@
   <button (click)="onDowloadPDF()">Descargar PDF</button>
 </span>
 
+<span>
+  <label>Subir archivo</label>
+  <input type="file" (change)="onFileHandle($event)"/>
+
+  <div style="margin-top: 2rem;">
+    <!-- <button (click)=""></button> -->
+  </div>
+</span>
+
 <!-- <app-post-card></app-post-card> -->
 <span *ngIf="user.email">{{ user.email }}</span>
 <app-products></app-products>

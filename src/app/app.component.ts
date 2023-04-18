@@ -1,12 +1,12 @@
-import { Component, inject, OnInit } from '@angular/core'
+import { Component, inject, OnInit } from '@angular/core';
 
 import {
   UsersService,
   AuthService,
   TokenService,
   FilesService,
-} from './services'
-import { User } from './types/user'
+} from './services';
+import { User } from './types/user';
 
 @Component({
   selector: 'app-root',
@@ -23,6 +23,7 @@ export class AppComponent implements OnInit {
   // Properties
   public hasUser: boolean = false;
   public user: User = { id: 0, name: '', email: '', password: '' };
+  public img: string = '';
 
   ngOnInit(): void {
     this.authService.userProfile$.subscribe((user) => {
@@ -82,11 +83,24 @@ export class AppComponent implements OnInit {
   }
 
   public onDowloadPDF() {
-    console.log("[download_file]");
-    return this.fileService.getFile(
-      'test.pdf',
-      'https://young-sands-07814.herokuapp.com/api/files/dummy.pdf',
-      'application/pdf'
-    ).subscribe();
+    console.log('[download_file]');
+    return this.fileService
+      .getFile(
+        'test.pdf',
+        'https://young-sands-07814.herokuapp.com/api/files/dummy.pdf',
+        'application/pdf'
+      )
+      .subscribe();
+  }
+
+  public onFileHandle(event: Event) {
+    const element = event.target as HTMLInputElement;
+    // Take file element seleted
+    const file = element.files?.item(0);
+    if (file) {
+      this.fileService.uploadFile(file).subscribe((response) => {
+        console.log("[upload_file]", response)
+      });
+    }
   }
 }
