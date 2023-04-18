@@ -24,4 +24,9 @@ export class FilesService {
       map(() => true)
     )
   }
+
+  public uploadFile(file: Blob) {
+    const formData = new FormData();
+    formData.append('file', file)
+  }
 }
