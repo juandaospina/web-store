@@ -1,8 +1,8 @@
 export interface User {
-  id: number;
+  id?: number;
   email: string;
   password: string;
-  name: string;
+  name?: string;
 }
 
 export interface CreateUser extends Omit<User, 'id'> {}

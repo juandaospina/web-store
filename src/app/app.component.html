@@ -1,10 +1,15 @@
 <app-navigation></app-navigation>
 <div style="margin-top: 4rem">
-  <button (click)="onUserCreateHandler()">Crear usuario</button>
-  <button (click)="onUserSigninHandler()">Ingresar</button>
-  <button (click)="onUserProfileHandler()">Ver perfil</button>
+  <button (click)="onUserProfileHandler()" *ngIf="hasUser; else elseBlock">
+    Ver perfil
+  </button>
+  <ng-template #elseBlock>
+    <button (click)="onUserCreateHandler()">Crear usuario</button>
+    <button (click)="onUserSigninHandler()">Ingresar</button>
+  </ng-template>
 </div>
 <!-- <app-post-card></app-post-card> -->
+<span *ngIf="user.email">{{ user.email }}</span>
 <app-products></app-products>
 <!-- 
 <h2>Instangular</h2>
