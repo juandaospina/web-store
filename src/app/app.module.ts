@@ -21,28 +21,24 @@ import { ProductDetailComponent } from './components/product-detail/product-deta
 import { TimeInterceptorConfig } from './interceptors/time.interceptor';
 import { TokenInterceptorConfig } from './interceptors/token.interceptor';
 import { AuthInterceptorConfig } from './interceptors/auth.interceptor';
+import { PagesModule } from './pages/pages.module';
+import { ComponentsModule } from './components/components.module';
 
 @NgModule({
   declarations: [
     AppComponent,
-    ImgComponent,
-    PostCardComponent,
-    PostInfoComponent,
-    ProductComponent,
-    ProductsComponent,
-    ProductImageComponent,
-    NavigationComponent,
     ReversePipe,
     TimeAgoPipe,
     HighlightDirective,
-    ProductDetailComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
     NgOptimizedImage,
-    SweetAlert2Module.forRoot(),
+    // SweetAlert2Module.forRoot(),
+    ComponentsModule,
+    PagesModule,
   ],
   providers: [
     TimeInterceptorConfig,
