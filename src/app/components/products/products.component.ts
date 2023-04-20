@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, Input, Output, EventEmitter } from '@angular/core';
 
 import Swal from 'sweetalert2';
 // import 'sweetalert2/src/sweetalert2.scss';
@@ -17,32 +17,17 @@ export class ProductsComponent {
   public storeService = inject(StoreService);
   public productsService = inject(ProductsService);
   // Properties
-  public statusResponse: 'loading' | 'success' | 'error' | 'init' = 'init';
+  @Input() products: Product[] = [];
+  @Input() statusResponse: string = '';
+  // @Input() limit!: number;
+  // @Input() offset!: number;
+  @Output() loadMoreProducts = new EventEmitter<any>();
   public shoppingCartList: Product[] = [];
   public total: number = 0;
-  public products: Product[] = [];
-  public limit: number = 10;
-  public offset: number = 0;
 
   ngOnInit() {
     this.statusResponse = 'loading';
     this.shoppingCartList = this.storeService.getShoppingCartList();
-
-    this.productsService.getAllProducts(this.limit, this.offset).subscribe({
-      next: (value) => {
-        this.products = value;
-        this.offset = this.limit;
-        this.statusResponse = 'success';
-      },
-      error: (err) => {
-        this.statusResponse = 'error';
-        Swal.fire({
-          title: 'Ups.. Algo malo ocurrió',
-          text: err,
-          icon: 'error',
-        });
-      },
-    });
 
     this.productsService.updatedProduct$.subscribe((product) => {
       const productIndex = this.products.findIndex(
@@ -62,12 +47,12 @@ export class ProductsComponent {
     });
   }
 
-  onAddToShoppingCart(product: Product) {
+  public onAddToShoppingCart(product: Product) {
     this.storeService.addProduct(product);
     this.total = this.storeService.getTotal();
   }
 
-  onCreateProduct() {
+  public onCreateProduct() {
     const newProduct = {
       title: 'Vans Clasic',
       price: 213000,
@@ -80,12 +65,7 @@ export class ProductsComponent {
     });
   }
 
-  onProductMoreLoad() {
-    this.productsService
-      .getAllProducts(this.limit, this.offset)
-      .subscribe((data) => {
-        this.products = [...this.products, ...data];
-        this.offset += this.limit;
-      });
+  public onProductsLoadHandle() {
+    this.loadMoreProducts.emit();
   }
 }
