@@ -2,8 +2,8 @@ import { Component, OnInit, inject } from '@angular/core';
 
 import Swal from 'sweetalert2';
 
+import { Product, StatusResponse } from 'src/app/types/product';
 import { ProductsService } from 'src/app/services';
-import { Product } from 'src/app/types/product';
 
 @Component({
   selector: 'app-home',
@@ -15,7 +15,7 @@ export class HomeComponent implements OnInit {
   private productService = inject(ProductsService);
   // Properties
   public products: Product[] = [];
-  public statusResponse: 'loading' | 'success' | 'error' | 'init' = 'init';
+  public statusResponse: StatusResponse = 'init';
   public limit: number = 10;
   public offset: number = 0;
   public blockRequest: boolean = false;

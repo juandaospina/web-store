@@ -1,3 +1,5 @@
+import { LOADING_STATUS } from "../constants";
+
 export interface Category {
   id: number;
   name: string;
@@ -18,3 +20,5 @@ export interface CreateProductDTO extends Omit<Product, 'id' | 'category'> {
 }
 
 export interface UpdateProductDTO extends Partial<CreateProductDTO> {}
+
+export type StatusResponse = typeof LOADING_STATUS[keyof typeof LOADING_STATUS]
