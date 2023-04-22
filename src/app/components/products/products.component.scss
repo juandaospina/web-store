@@ -1,7 +1,9 @@
 .products-grid {
+  width: 90%;
   display: flex;
   flex-direction: column;
   margin-top: 5rem;
+  margin: 0 auto;
 }
 
 .product-detail {
@@ -26,7 +28,7 @@
   .products-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 15px;
+    gap: 20px;
   }
 }
 

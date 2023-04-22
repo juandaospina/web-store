@@ -18,13 +18,28 @@ export class HomeComponent implements OnInit {
   public statusResponse: 'loading' | 'success' | 'error' | 'init' = 'init';
   public limit: number = 10;
   public offset: number = 0;
+  public blockRequest: boolean = false;
 
   ngOnInit(): void {
+    // console.log('[on_init_home]');
+    this.onLoadProductsList();
+    this.offset += this.limit;
+  }
+
+  public onScrollProducts() {
+    this.onLoadProductsList();
+    this.blockRequest = true
+    setTimeout(() => {
+      this.blockRequest = !this.blockRequest;
+    }, 2000)
+    this.offset += this.limit;
+  }
+
+  public onLoadProductsList() {
     this.productService.getAllProducts(this.limit, this.offset).subscribe({
-      next: (value) => {
-        this.products = value;
-        this.offset = this.limit;
+      next: (response) => {
         this.statusResponse = 'success';
+        this.products = [...this.products, ...response];
       },
       error: (err) => {
         this.statusResponse = 'error';
@@ -35,15 +50,5 @@ export class HomeComponent implements OnInit {
         });
       },
     });
-  }
-
-  public onProductMoreLoad() {
-    // console.log("[limit_offset]", { values })
-    this.productService
-      .getAllProducts(this.limit, this.offset)
-      .subscribe((data) => {
-        this.products = [...this.products, ...data];
-        this.offset += this.limit;
-      });
   }
 }

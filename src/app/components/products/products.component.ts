@@ -19,6 +19,7 @@ export class ProductsComponent {
   // Properties
   @Input() products: Product[] = [];
   @Input() statusResponse: string = '';
+  @Input() blockRequest!: boolean;
   // @Input() limit!: number;
   // @Input() offset!: number;
   @Output() loadMoreProducts = new EventEmitter<any>();
@@ -66,6 +67,7 @@ export class ProductsComponent {
   }
 
   public onProductsLoadHandle() {
+    console.log("[scroll_in_products]")
     this.loadMoreProducts.emit();
   }
 }

@@ -1,12 +1,18 @@
 <!-- <button type="button" (click)="onCreateProduct()" style="margin-top: 10rem">
   Create producto
 </button> -->
-<div class="products-grid">
+<div class="products-grid"
+  (scrolled)="onProductsLoadHandle()"
+  infiniteScroll
+  [infiniteScrollDisabled]="blockRequest"
+  [infiniteScrollDistance]="4"
+  [infiniteScrollThrottle]="100"
+>
   <app-product
     (addedProduct)="onAddToShoppingCart($event)"
     [product]="product"
     *ngFor="let product of products"
   ></app-product>
 </div>
-<button (click)="onProductsLoadHandle()">Cargar más...</button>
+<!-- <button (click)="onProductsLoadHandle()">Cargar más...</button> -->
 <app-product-detail></app-product-detail>
