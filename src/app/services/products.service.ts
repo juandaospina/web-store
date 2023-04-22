@@ -6,7 +6,7 @@ import {
   HttpStatusCode,
 } from '@angular/common/http';
 import { Injectable, inject, OnInit, InjectionToken } from '@angular/core';
-import { BehaviorSubject, throwError } from 'rxjs';
+import { BehaviorSubject, of, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 
@@ -16,7 +16,7 @@ import { checkTime } from '../interceptors/time.interceptor';
 
 @Injectable({
   providedIn: 'root',
-  deps: [new InjectionToken<HttpInterceptor[]>('HTTP_INTERCEPTORS')]
+  deps: [new InjectionToken<HttpInterceptor[]>('HTTP_INTERCEPTORS')],
 })
 export class ProductsService implements OnInit {
   // Dependencies
@@ -50,9 +50,9 @@ export class ProductsService implements OnInit {
   public deletedProduct$ = this._deletedProduct.asObservable();
   ngOnInit(): void {}
 
-  // ↓ Util methods 
+  // ↓ Util methods
   private handleErrors(error: HttpErrorResponse): Observable<never> {
-    console.log("[error_handle]", error)
+    console.log('[error_handle]', error);
     if (error.status == HttpStatusCode.Forbidden)
       return throwError(() => 'No tiene permisos para realizar la solicitud.');
     if (error.status == HttpStatusCode.NotFound)
@@ -75,10 +75,13 @@ export class ProductsService implements OnInit {
   }
 
   /*
-    ↓ These methods allow access to server resources such as 
-    products (GET, POST, PUT, DELETE)
-  */ 
-  getAllProducts(limit?: number, offset?: number): Observable<Product[]> {
+    ↓ These methods allow access to server resources of products (GET, POST, PUT, DELETE)
+      get by category
+  */
+  public getAllProducts(
+    limit?: number,
+    offset?: number
+  ): Observable<Product[]> {
     let params = new HttpParams();
     if (limit != undefined && offset != undefined) {
       // Se debe llamar params = params, set devuelve el body,
@@ -87,36 +90,54 @@ export class ProductsService implements OnInit {
       params = params.set('limit', limit);
     }
     return this._http
-      .get<Product[]>(`${environment.baseUrl}/products`, { params, context: checkTime() })
+      .get<Product[]>(`${environment.baseUrl}/products`, {
+        params,
+        context: checkTime(),
+      })
       .pipe(
-        map(products => products.map((product) => {
-          return {
-            ...product,
-            taxe: product.price * 0.19
-          }
-        })),
+        map((products) =>
+          products.map((product) => {
+            return {
+              ...product,
+              taxe: product.price * 0.19,
+            };
+          })
+        ),
         catchError((err: HttpErrorResponse): Observable<never> => {
           return this.handleErrors(err);
         })
       );
   }
 
-  getProduct(id: number) {
+  public getByCategory(categoryId: string, limit: number, offset: number) {
+    let params = new HttpParams
+    if (limit !== null && offset !== null) {
+      params = params.set('limit', limit);
+      params = params.set('offset', offset);
+    }
+    return this._http.get<Product[]>(
+      `${environment.baseUrl}/categories/${categoryId}/products`, {
+        params
+      }
+    );
+  }
+
+  public getProduct(id: number) {
     return this._http.get<Product>(`${environment.baseUrl}/${id}`);
   }
 
-  create(data: CreateProductDTO) {
+  public create(data: CreateProductDTO) {
     return this._http.post<Product>(`${environment.baseUrl}/products`, data);
   }
 
-  update(id: number, data: UpdateProductDTO) {
+  public update(id: number, data: UpdateProductDTO) {
     return this._http.put<Product>(
       `${environment.baseUrl}/products/${id}`,
       data
     );
   }
 
-  delete(id: number) {
+  public delete(id: number) {
     return this._http.delete<boolean>(`${environment.baseUrl}/products/${id}`);
   }
 }

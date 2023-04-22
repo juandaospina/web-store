@@ -1,18 +1,24 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { HomeComponent } from './pages/home/home.component';
-import { LoginComponent, ProfileComponent, RegisterComponent } from './pages';
+
+import {
+  CategoryComponent,
+  HomeComponent,
+  LoginComponent,
+  ProfileComponent,
+  RegisterComponent,
+} from './pages';
 
 const routes: Routes = [
   {
     path: '',
     redirectTo: 'home',
-    pathMatch: 'full'
+    pathMatch: 'full',
   },
   {
     path: 'home',
     component: HomeComponent,
-    title: 'Inicio'
+    title: 'Inicio',
   },
   {
     path: 'register',
@@ -25,6 +31,10 @@ const routes: Routes = [
   {
     path: 'profile',
     component: ProfileComponent,
+  },
+  {
+    path: 'category/:id',
+    component: CategoryComponent,
   },
 ];
 
