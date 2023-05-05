@@ -1,6 +1,7 @@
-import { NgModule } from '@angular/core';
 import { CommonModule, NgOptimizedImage } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
+import { RouterModule } from '@angular/router';
+import { NgModule } from '@angular/core';
 
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 
@@ -23,10 +24,11 @@ import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
   ],
   imports: [
     CommonModule,
+    InfiniteScrollModule,
     HttpClientModule,
     NgOptimizedImage,
+    RouterModule,
     SweetAlert2Module.forRoot(),
-    InfiniteScrollModule,
   ],
   exports: [ProductsComponent, NavigationComponent],
 })

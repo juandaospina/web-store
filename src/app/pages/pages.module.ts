@@ -12,6 +12,7 @@ import {
   ProfileComponent,
 } from './index';
 import { ComponentsModule } from '../components/components.module';
+import { ProductDetailComponent } from './product-detail/product-detail.component';
 
 
 @NgModule({
@@ -24,10 +25,12 @@ import { ComponentsModule } from '../components/components.module';
     NotFoundComponent,
     LoginComponent,
     ProfileComponent,
+    ProductDetailComponent,
   ],
   imports: [
     CommonModule,
     ComponentsModule,
+    NgOptimizedImage
   ],
   exports: [
     HomeComponent
