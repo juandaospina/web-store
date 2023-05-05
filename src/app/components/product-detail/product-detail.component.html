@@ -1,4 +1,4 @@
-<div class="product-detail" [class.active]="showProductDetail">
+<div class="product-detail active">
   <div>
     <button (click)="toggleProductDetail()">Cerrar</button>
   </div>
@@ -26,8 +26,8 @@
       ></button>
     </div>
     <div class="carousel-inner">
-      <div class="carousel-item active" *ngFor="let image of product.images">
-        <img [ngSrc]="image" width="200" height="280" class="d-block w-100" [alt]="product.title" />
+      <div class="carousel-item active" *ngFor="let image of product?.images">
+        <img [ngSrc]="image" width="200" height="280" class="d-block w-100" [alt]="product?.title" />
       </div>
     </div>
     <button
@@ -50,9 +50,9 @@
     </button>
   </div>
   <div class="detail-info">
-    <h3>{{ product.price | currency : "COP" }}</h3>
-    <p>{{ product.title }}</p>
-    <span>{{ product.description }}</span>
+    <h3>{{ product?.price | currency : "COP" }}</h3>
+    <p>{{ product?.title }}</p>
+    <span>{{ product?.description }}</span>
   </div>
   <button type="button" (click)="onUpdateProduct()">Actualizar producto</button>
   <button type="button" (click)="onDeleteProduct()">Eliminar producto</button>

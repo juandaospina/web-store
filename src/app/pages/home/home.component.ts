@@ -1,4 +1,5 @@
 import { Component, OnInit, inject } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 
 import Swal from 'sweetalert2';
 
@@ -13,17 +14,23 @@ import { ProductsService } from 'src/app/services';
 export class HomeComponent implements OnInit {
   // Dependencies
   private productService = inject(ProductsService);
+  private route = inject(ActivatedRoute);
   // Properties
   public products: Product[] = [];
   public statusResponse: StatusResponse = 'init';
   public limit: number = 10;
   public offset: number = 0;
   public blockRequest: boolean = false;
+  public productId: string | null = null;
 
   ngOnInit(): void {
     // console.log('[on_init_home]');
     this.onLoadProductsList();
     this.offset += this.limit;
+
+    this.route.queryParamMap.subscribe(params => {
+      this.productId = params.get('product');
+    })
   }
 
   public onScrollProducts() {

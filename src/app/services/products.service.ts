@@ -6,7 +6,7 @@ import {
   HttpStatusCode,
 } from '@angular/common/http';
 import { Injectable, inject, OnInit, InjectionToken } from '@angular/core';
-import { BehaviorSubject, of, throwError } from 'rxjs';
+import { BehaviorSubject, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 
@@ -32,6 +32,7 @@ export class ProductsService implements OnInit {
     category: {
       id: 0,
       name: '',
+      typeImg: ''
     },
   });
   private _deletedProduct = new BehaviorSubject<Product>({
@@ -43,6 +44,7 @@ export class ProductsService implements OnInit {
     category: {
       id: 0,
       name: '',
+      typeImg: ''
     },
   });
   // Observables
@@ -122,8 +124,8 @@ export class ProductsService implements OnInit {
     );
   }
 
-  public getProduct(id: number) {
-    return this._http.get<Product>(`${environment.baseUrl}/${id}`);
+  public getProduct(id: string) {
+    return this._http.get<Product>(`${environment.baseUrl}/products/${id}`);
   }
 
   public create(data: CreateProductDTO) {

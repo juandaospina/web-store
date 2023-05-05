@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Product } from 'src/app/types/product';
 import { StoreService, ProductsService } from 'src/app/services';
 
@@ -8,20 +8,12 @@ import { StoreService, ProductsService } from 'src/app/services';
   styleUrls: ['./product-detail.component.scss'],
 })
 export class ProductDetailComponent implements OnInit {
-  public showProductDetail: boolean = false;
+  // Properties
+  @Input() showProductDetail!: boolean;
+  @Input() product!: Product | null;
+  @Output() setShowProductDetail = new EventEmitter();
   public storeService = inject(StoreService);
   public productService = inject(ProductsService);
-  public product: Product = {
-    id: 0,
-    title: '',
-    description: '',
-    images: [],
-    price: 0,
-    category: {
-      id: 0,
-      name: '',
-    },
-  };
 
   ngOnInit(): void {
     this.storeService.productDetail$.subscribe((product) => {
@@ -33,8 +25,7 @@ export class ProductDetailComponent implements OnInit {
   }
 
   toggleProductDetail() {
-    // this.storeService.onCloseProductDetail();
-    this.showProductDetail = !this.showProductDetail;
+    this.setShowProductDetail.emit(false);
   }
 
   onUpdateProduct() {
@@ -42,17 +33,17 @@ export class ProductDetailComponent implements OnInit {
       title: 'Nike Jordan',
       price: 456000,
     };
-    this.productService.update(this.product.id, data).subscribe((data) => {
+    this.productService.update(this.product?.id ?? 0, data).subscribe((data) => {
       this.product = data;
-      this.productService.onUpdatedProduct(data);
+      this.productService.onUpdatedProduct(data); 
     });
   }
 
   onDeleteProduct() {
-    this.productService.delete(this.product.id).subscribe((res) => {
+    this.productService.delete(this.product?.id ?? 0).subscribe((res) => {
       if (res) {
         this.showProductDetail = false;
-        this.productService.onDeletedProduct(this.product);
+        this.productService.onDeletedProduct(this.product as Product);
       }
     });
   }

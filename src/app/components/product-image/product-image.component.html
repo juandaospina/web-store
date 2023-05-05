@@ -1,11 +1,13 @@
-<img
-  [ngSrc]="img"
-  width="200"
-  height="300"
-  priority
-  (error)="imgError()"
-  *ngIf="img.includes('https'); else elseImg"
-/>
-<ng-template #elseImg>
-  <img [ngSrc]="imageDefault" width="200" height="300" alt="image default" />
-</ng-template>
+<a [routerLink]="['/product', productId]">
+  <img
+    [ngSrc]="img"
+    width="200"
+    height="300"
+    priority
+    (error)="imgError()"
+    *ngIf="img.includes('https'); else elseImg"
+  />
+  <ng-template #elseImg>
+    <img [ngSrc]="imageDefault" width="200" height="300" alt="image default" />
+  </ng-template>
+</a>

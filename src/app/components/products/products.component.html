@@ -1,7 +1,8 @@
 <!-- <button type="button" (click)="onCreateProduct()" style="margin-top: 10rem">
   Create producto
 </button> -->
-<div class="products-grid"
+<div
+  class="products-grid"
   (scrolled)="onProductsLoadHandle()"
   infiniteScroll
   [infiniteScrollDisabled]="blockRequest"
@@ -15,4 +16,10 @@
   ></app-product>
 </div>
 <!-- <button (click)="onProductsLoadHandle()">Cargar más...</button> -->
-<app-product-detail></app-product-detail>
+
+<app-product-detail
+  *ngIf="hasProductDetail"
+  [product]="productDetail"
+  [showProductDetail]="hasProductDetail"
+  (setShowProductDetail)="onDetailShowHandler($event)"
+></app-product-detail>

@@ -5,8 +5,10 @@ import {
   CategoryComponent,
   HomeComponent,
   LoginComponent,
+  NotFoundComponent,
   ProfileComponent,
   RegisterComponent,
+  ProductDetailComponent
 } from './pages';
 
 const routes: Routes = [
@@ -36,6 +38,14 @@ const routes: Routes = [
     path: 'category/:id',
     component: CategoryComponent,
   },
+  {
+    path: 'product/:id',
+    component: ProductDetailComponent,
+  },
+  {
+    path: '**',
+    component: NotFoundComponent
+  }
 ];
 
 @NgModule({

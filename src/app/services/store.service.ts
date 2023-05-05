@@ -21,6 +21,7 @@ export class StoreService {
     category: {
       id: 0,
       name: '',
+      typeImg: ''
     },
   });
   public cart$ = this._cart.asObservable();

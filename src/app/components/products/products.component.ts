@@ -1,6 +1,6 @@
 import { Component, inject, Input, Output, EventEmitter } from '@angular/core';
 
-import Swal from 'sweetalert2';
+// import Swal from 'sweetalert2';
 // import 'sweetalert2/src/sweetalert2.scss';
 
 import { ProductsService } from 'src/app/services/products.service';
@@ -20,11 +20,20 @@ export class ProductsComponent {
   @Input() products: Product[] = [];
   @Input() statusResponse: string = '';
   @Input() blockRequest!: boolean;
-  // @Input() limit!: number;
-  // @Input() offset!: number;
+  /*
+    ↓	 @Input = It is a property received by the parent component
+    set → Is a convencional setter, this assigne the value a the Input property and execute code that is defined it
+  */
+  @Input() set productId(id: string | null) {
+    if (id) {
+      this.showDetail(id);
+    }
+  };
   @Output() loadMoreProducts = new EventEmitter<any>();
   public shoppingCartList: Product[] = [];
   public total: number = 0;
+  public productDetail: Product | null = null;
+  public hasProductDetail: boolean = false;
 
   ngOnInit() {
     this.statusResponse = 'loading';
@@ -66,8 +75,27 @@ export class ProductsComponent {
     });
   }
 
+  public onDetailShowHandler(show: boolean) {
+    this.hasProductDetail = show;
+  }
+
   public onProductsLoadHandle() {
     console.log("[scroll_in_products]")
     this.loadMoreProducts.emit();
+  }
+
+  public showDetail(id: string): void {
+    if (!this.hasProductDetail) {
+      this.hasProductDetail = true;
+    }
+    this.productsService.getProduct(id).subscribe({
+      next: (data) => {
+        // this.hasProductDetail = !this.hasProductDetail;
+        this.productDetail = data;
+      },
+      error: (error) => {
+        window.alert(`Error al ver detalle de producto → ${error}`)
+      }
+    })
   }
 }
