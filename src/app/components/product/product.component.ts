@@ -18,6 +18,7 @@ export class ProductComponent {
     category: {
       id: 0,
       name: '',
+      typeImg: '',
     },
   };
   @Output() addedProduct = new EventEmitter<Product>();
